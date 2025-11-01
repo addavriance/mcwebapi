@@ -1,3 +1,5 @@
+import logging
+
 import websocket
 import json
 import base64
@@ -24,7 +26,7 @@ class ConnectionManager:
     def connect(self) -> None:
         """Establish WebSocket connection."""
         ws_url = f"ws://{self.host}:{self.port}/"
-        print(f"Connecting to {ws_url}")
+        logging.info(f"Connecting to {ws_url}")
 
         self.ws = websocket.WebSocket()
         self.ws.connect(ws_url)
@@ -65,7 +67,7 @@ class ConnectionManager:
                     self._message_handler(message)
             except Exception as e:
                 if self._connected:
-                    print(f"Receiver error: {e}")
+                    logging.error(f"Receiver error: {e}")
                 break
 
     def _encode_message(self, message: dict) -> str:

@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Dict, Optional
 
@@ -89,7 +90,7 @@ class MinecraftClient:
         }
 
         try:
-            print(f"Sending message: {message}")
+            logging.info(f"Sending message: {message}")
             self.connection.send_message(message)
         except Exception as e:
             promise.reject(e)
@@ -99,21 +100,22 @@ class MinecraftClient:
 
     def _authenticate(self) -> None:
         """Perform authentication flow."""
-        print("Checking authentication requirements...")
-        auth_info = self.send_request("auth", "getInfo", []).wait()
-        print(f"Auth info: {auth_info}")
+        check_result = self.send_request("auth", "check", []).wait()
+        logging.info(f"Auth check (no auth): {check_result}")
 
-        print("Authenticating...")
+        auth_info = self.send_request("auth", "getInfo", []).wait()
+        logging.info(f"Auth info: {auth_info}")
+
         auth_result = self.send_request("auth", "authenticate", [self.auth_key]).wait()
-        print(f"Authentication result: {auth_result}")
+        logging.info(f"Authentication result: {auth_result}")
 
         if auth_result.get("success"):
             self._authenticated = True
-            print("Successfully authenticated!")
+            logging.info("Successfully authenticated!")
 
             # Verify authentication
             check_result = self.send_request("auth", "check", []).wait()
-            print(f"Auth check: {check_result}")
+            logging.info(f"Auth check: {check_result}")
         else:
             raise ConnectionError(f"Authentication failed: {auth_result.get('message')}")
 
@@ -121,7 +123,6 @@ class MinecraftClient:
         """Handle incoming WebSocket messages."""
         try:
             message = self.connection._decode_message(raw_message)
-            print(f"Received message: {message}")
 
             request_id = message.get("requestId")
             if not request_id or request_id not in self._pending_requests:
@@ -144,7 +145,7 @@ class MinecraftClient:
                 promise.reject(Exception(f"{error_data.get('code', 'UNKNOWN')}: {error_msg}"))
 
         except Exception as e:
-            print(f"Error handling message: {e}")
+            logging.error(f"Error handling message: {e}")
 
     def _generate_request_id(self) -> str:
         """Generate short unique request ID."""
