@@ -5,7 +5,7 @@ A Python client for interacting with Minecraft servers via WebSocket API.
 
 from .api import MinecraftAPI
 from .core import MinecraftClient, Promise
-from .objects import Player, World, Command
+from .objects import Player, Level, Command, Block
 
 __version__ = "0.1.0"
 __author__ = "addavriance"
@@ -15,6 +15,7 @@ __all__ = [
     "MinecraftClient",
     "Promise",
     "Player",
-    "World",
-    "Command"
+    "Level",
+    "Command",
+    "Block",
 ]

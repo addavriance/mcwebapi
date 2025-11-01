@@ -1,5 +1,5 @@
 from .core import MinecraftClient
-from .objects import Player, World, Command
+from .objects import Player, Level, Command, Block
 
 
 class MinecraftAPI:
@@ -21,8 +21,9 @@ class MinecraftAPI:
 
         # Initialize entity instances
         self.player = Player(self._client)
-        self.world = World(self._client)
+        self.level = Level(self._client)
         self.command = Command(self._client)
+        self.block = Block(self._client)
 
     def connect(self) -> None:
         """Connect to the Minecraft server."""

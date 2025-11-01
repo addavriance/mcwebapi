@@ -1,11 +1,13 @@
 from .base import SocketInstance
 from .player import Player
-from .world import World
+from .level import Level
 from .command import Command
+from .block import Block
 
 __all__ = [
     "SocketInstance",
     "Player",
-    "World",
+    "Level",
     "Command",
+    "Block",
 ]
