@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/pypi/l/mcwebapi?style=for-the-badge&labelColor=black)](LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/mcwebapi?style=for-the-badge&labelColor=black&color=green)](https://pypi.org/project/mcwebapi/)
 
-Python client library for the [Minecraft WebSocket API](https://github.com/addavriance/minecraft-websocket-api) NeoForge mod. Control your Minecraft server programmatically with a clean, async-ready API.
+Python client library for the [Minecraft WebSocket API](https://github.com/addavriance/MinecraftWebsocketAPI) mod. Control your Minecraft server programmatically with a clean, async-ready API.
 
 ## Installation
 
@@ -213,7 +213,7 @@ if promise.is_completed():
 
 This client requires the Minecraft WebSocket API mod to be installed on your server.
 
-**Mod Repository:** [minecraft-websocket-api](https://github.com/addavriance/minecraft-websocket-api)
+**Mod Repository:** [MinecraftWebsocketAPI](https://github.com/addavriance/MinecraftWebsocketAPI)
 
 1. Install the NeoForge mod on your Minecraft 1.21.1 server
 2. Configure `config/mcwebapi-server.toml`:
@@ -336,5 +336,5 @@ MIT License - see [LICENSE](LICENSE) file
 ## Links
 
 - **PyPI:** [pypi.org/project/mcwebapi](https://pypi.org/project/mcwebapi/)
-- **Server Mod:** [minecraft-websocket-api](https://github.com/addavriance/minecraft-websocket-api)
+- **Server Mod:** [MinecraftWebsocketAPI](https://github.com/addavriance/MinecraftWebsocketAPI)
 - **Issues:** [GitHub Issues](https://github.com/addavriance/mcwebapi/issues)
