@@ -1,3 +1,39 @@
-.idea
-.venv
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+.venv/
+venv/
+env/
 *.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Build artifacts - ВАЖНО!
+dist/
+build/
+*.egg-info/
+*.egg
+wheels/
+
+# Testing
+.pytest_cache/
+.coverage
+.tox/
+htmlcov/
+.hypothesis/
+
+# PyPI credentials
+.pypirc
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
