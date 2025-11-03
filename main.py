@@ -1,13 +1,16 @@
 # Example
-
 from mcwebapi import MinecraftAPI
 
-with MinecraftAPI(
-        # everything by default
-) as api:
-    position = api.player.getPosition("Dev").wait()
-    print(f"Player position: {position}")
+if __name__ == "__main__":
+    api = MinecraftAPI()
 
-    result = api.command.some_method("Lol")
+    api.connect()
 
-    print(result)  # Error, cuz NYI
+    player = api.Player("Dev")
+
+    player.getX().then(print)
+    player.getY().then(print)
+    player.getZ().then(print)
+
+    api.wait_for_pending()
+    api.disconnect()

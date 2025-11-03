@@ -19,11 +19,7 @@ class MinecraftAPI:
     ):
         self._client = MinecraftClient(host, port, auth_key, timeout)
 
-        # Initialize entity instances
-        self.player = Player(self._client)
-        self.level = Level(self._client)
-        self.command = Command(self._client)
-        self.block = Block(self._client)
+        self.timeout = timeout
 
     def connect(self) -> None:
         """Connect to the Minecraft server."""
@@ -48,4 +44,11 @@ class MinecraftAPI:
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         """Context manager exit."""
-        self.disconnect()
+        self.disconnect()    def Player(self, identifier) -> Player:
+        return Player(self._client, identifier)
+
+    def Level(self, identifier) -> Level:
+        return Level(self._client, identifier)
+
+    def Block(self, *identifiers) -> Block:
+        return Block(self._client, *identifiers)
