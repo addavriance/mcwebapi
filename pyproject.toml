@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcwebapi"
-dynamic = ["version"]
+version = "0.2.0"
 description = "A Python client for interacting with Minecraft servers via WebSocket API"
 authors = [
     {name = "addavriance"}
@@ -33,3 +33,6 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/addavriance/mcwebapi"
 "Bug Tracker" = "https://github.com/addavriance/mcwebapi/issues"
+
+[tool.setuptools]
+packages = {find = {}}
