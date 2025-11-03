@@ -126,6 +126,9 @@ class MinecraftClient:
     def _handle_message(self, raw_message: str) -> None:
         """Handle incoming WebSocket messages."""
         try:
+            if not raw_message or raw_message.strip() == "":
+                return
+
             message = self.connection._decode_message(raw_message)
 
             request_id = message.get("requestId")
