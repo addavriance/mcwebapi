@@ -1,3 +1,5 @@
+import time
+
 from .core import MinecraftClient
 from .objects import Player, Level, Command, Block
 
@@ -37,14 +39,23 @@ class MinecraftAPI:
         """Check if authenticated with server."""
         return self._client.is_authenticated()
 
+    def wait_for_pending(self):
+        start_time = time.time()
+
+        while self._client.has_pending_requests() and time.time() - start_time < self.timeout:
+            time.sleep(0.1)
+
     def __enter__(self) -> "MinecraftAPI":
         """Context manager entry."""
         self.connect()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Context manager exit."""
-        self.disconnect()    def Player(self, identifier) -> Player:
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Wait for all promises to complete before disconnecting"""
+        self.wait_for_pending()
+        self.disconnect()
+
+    def Player(self, identifier) -> Player:
         return Player(self._client, identifier)
 
     def Level(self, identifier) -> Level:

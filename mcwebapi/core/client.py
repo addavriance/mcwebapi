@@ -55,6 +55,10 @@ class MinecraftClient:
         """Check connection status."""
         return self.connection.is_connected()
 
+    def has_pending_requests(self) -> bool:
+        """Check pending requests status."""
+        return self._pending_requests != {}
+
     def send_request(self, module: str, method: str, args: Optional[list] = None) -> Promise:
         """
         Send request to server and return a Promise.

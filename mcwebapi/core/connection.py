@@ -55,7 +55,7 @@ class ConnectionManager:
     def start_receiver(self, message_handler: Callable) -> None:
         """Start message receiver thread."""
         self._message_handler = message_handler
-        self._receiver_thread = threading.Thread(target=self._receiver_loop, daemon=True)
+        self._receiver_thread = threading.Thread(target=self._receiver_loop, daemon=False)
         self._receiver_thread.start()
 
     def _receiver_loop(self) -> None:
