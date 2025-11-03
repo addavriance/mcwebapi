@@ -1,41 +1,42 @@
 # mcwebapi
 
+# WARNING: This package is under active development.
+## This package is not yet ready for production use! Many things and specifications may change
+
+
+
 [![PyPI](https://img.shields.io/pypi/v/mcwebapi?style=for-the-badge&logo=pypi&labelColor=black&color=blue)](https://pypi.org/project/mcwebapi/)
 [![Python](https://img.shields.io/pypi/pyversions/mcwebapi?style=for-the-badge&logo=python&labelColor=black)](https://pypi.org/project/mcwebapi/)
-[![License](https://img.shields.io/pypi/l/mcwebapi?style=for-the-badge&labelColor=black)](LICENSE)
 [![Downloads](https://img.shields.io/pypi/dm/mcwebapi?style=for-the-badge&labelColor=black&color=green)](https://pypi.org/project/mcwebapi/)
 
 Python client library for the [Minecraft WebSocket API](https://github.com/addavriance/MinecraftWebsocketAPI) mod. Control your Minecraft server programmatically with a clean, async-ready API.
 
-## Installation
-
-```bash
-pip install mcwebapi
-```
-
 ## Quick Start
 
 ```python
+import math
+import random
+
 from mcwebapi import MinecraftAPI
 
-# Context manager automatically connects and authenticates
-with MinecraftAPI(
-    host="localhost",
-    port=8765,
-    auth_key="your-secret-key"
-) as api:
-    # Get player position
-    position = api.player.getPosition("Steve").wait()
-    print(f"Player at: {position}")
-    
-    # Send a message
-    api.player.sendMessage("Steve", "Hello from Python!").wait()
-    
-    # Teleport player
-    api.player.teleport("Steve", 100, 64, 100).wait()
-    
-    # Set a block
-    api.level.setBlock("minecraft:overworld", "minecraft:diamond_block", 0, 64, 0).wait()
+with MinecraftAPI() as api:
+    try:
+        player = api.Player("Dev")
+
+        while True:
+            x, y, z = player.getPosition().wait().values()
+
+            s_x, s_y, s_z = math.floor(x), y-0.5, math.floor(z)
+
+            block_stands_on = api.Block('minecraft:overworld', s_x, s_y, s_z).getBlock().wait()
+
+            available_blocks = ['minecraft:diamond_block', 'minecraft:gold_block', 'minecraft:iron_block']
+
+            if block_stands_on['type'] == 'minecraft:air':
+                api.Block('minecraft:overworld', s_x, s_y, s_z).setBlock(random.choice(available_blocks))
+
+    except TimeoutError:
+        print("Request timed out")
 ```
 
 ## Features
@@ -51,75 +52,75 @@ with MinecraftAPI(
 ### Player Operations
 
 ```python
+from mcwebapi import MinecraftAPI
+
 with MinecraftAPI() as api:
     # Health management
-    health = api.player.getHealth("Steve").wait()
-    api.player.setHealth("Steve", 20.0).wait()
+    player = api.Player("Steve")
+    
+    health = player.getHealth().then(print)
+    player.setHealth(20.0)
     
     # Inventory
-    inventory = api.player.getInventory("Steve").wait()
-    api.player.giveItem("Steve", "minecraft:diamond", 64).wait()
-    api.player.clearInventory("Steve").wait()
+    inventory = player.getInventory().then(print)
+    player.giveItem("minecraft:diamond", 64)
+    player.clearInventory()
     
     # Effects
-    api.player.addEffect("Steve", "minecraft:speed", 200, 1).wait()
-    effects = api.player.getEffects("Steve").wait()
+    player.addEffect("minecraft:speed", 200, 1)
+    effects = player.getEffects().then(print)
     
     # Teleportation
-    api.player.teleportToDimension("Steve", "minecraft:the_nether", 0, 64, 0).wait()
+    player.teleportToDim("minecraft:the_nether", 0, 64, 0)
     
     # Game mode
-    api.player.setGameMode("Steve", "creative").wait()
+    player.setGameMode("creative")
 ```
 
 ### World Operations
 
 ```python
+from mcwebapi import MinecraftAPI
+
 with MinecraftAPI() as api:
     # Time control
-    api.level.setDayTime("minecraft:overworld", 6000).wait()  # Noon
-    is_day = api.level.isDay("minecraft:overworld").wait()
+    overworld = api.Level("minecraft:overworld")
+    
+    overworld.setDayTime("minecraft:overworld", 6000).wait()  # Noon
+    is_day = overworld.isDay("minecraft:overworld").wait()
     
     # Weather
-    api.level.setWeather("minecraft:overworld", True, False).wait()  # Rain, no thunder
+    overworld.setWeather("minecraft:overworld", True, False).wait()  # Rain, no thunder
     
     # Blocks
-    block = api.level.getBlock("minecraft:overworld", 0, 64, 0).wait()
-    api.level.setBlock("minecraft:overworld", "minecraft:stone", 0, 64, 0).wait()
+    block = overworld.getBlock("minecraft:overworld", 0, 64, 0).wait()
+    overworld.setBlock("minecraft:overworld", "minecraft:stone", 0, 64, 0).wait()
     
     # World info
-    levels = api.level.getAvailableLevels().wait()
-    info = api.level.getLevelInfo("minecraft:overworld").wait()
+    levels = overworld.getAvailableLevels().wait()
+    info = overworld.getLevelInfo().wait()
 ```
 
 ### Block Operations
 
 ```python
+from mcwebapi import MinecraftAPI
+
 with MinecraftAPI() as api:
     # Get block info
-    block_info = api.block.getBlock("minecraft:overworld", 10, 64, 10).wait()
+    block = api.Block("minecraft:overworld", 10, 64, 10).then(print)
     
     # Container inventory
-    inventory = api.block.getInventory("minecraft:overworld", 10, 64, 10).wait()
+    inventory = block.getInventory().wait()
     
     # Set items in containers
-    api.block.setInventorySlot(
-        "minecraft:overworld", 10, 64, 10,
+    block.setInventorySlot(
         slot=0,
         itemId="minecraft:diamond",
         count=64
     ).wait()
     
-    # Furnace operations
-    furnace = api.block.getFurnaceInfo("minecraft:overworld", 10, 64, 10).wait()
-    
-    # Fill area (max 10k blocks)
-    api.block.fillArea(
-        "minecraft:overworld",
-        0, 64, 0,  # From
-        10, 64, 10,  # To
-        "minecraft:glass"
-    ).wait()
+    furnace = block.getFurnaceInfo().wait() # but if not a furnace, you'll get null
 ```
 
 ### Async Patterns
@@ -133,14 +134,14 @@ api = MinecraftAPI()
 api.connect()
 
 # Chain callbacks
-api.player.getPosition("Steve").then(
+api.Player("Steve").getPosition().then(
     lambda pos: print(f"Position: {pos}")
 )
 
 # Handle multiple requests
 positions = []
 for player in ["Steve", "Alex", "Notch"]:
-    api.player.getPosition(player).then(
+    api.Player(player).getPosition().then(
         lambda pos, p=player: positions.append({p: pos})
     )
 ```
@@ -156,7 +157,7 @@ try:
     api.connect()
     
     if api.is_authenticated():
-        result = api.player.getHealth("Steve").wait()
+        result = api.Player("Steve").getHealth().wait()
         print(result)
         
 finally:
@@ -185,23 +186,23 @@ MinecraftAPI(
 - `is_authenticated() -> bool` - Check authentication status
 
 **Modules:**
-- `api.player` - Player operations
-- `api.level` - World operations
-- `api.block` - Block operations
-- `api.command` - Command execution (if implemented server-side)
+- `api.Player` - Player operations
+- `api.Level` - World operations
+- `api.Block` - Block operations
+- ... and many more soon!
 
 ### Promise API
 
 All API calls return a `Promise` object:
 
 ```python
-promise = api.player.getHealth("Steve")
+promise = api.Player("Steve").getHealth()
 
 # Wait synchronously
-result = promise.wait()
+result = promise.wait() # blocks main loop
 
 # Or use callbacks
-promise.then(lambda health: print(f"Health: {health}"))
+promise.then(lambda health: print(f"Health: {health}")) # resolves in connection thread, sometime
 
 # Check status
 if promise.is_completed():
@@ -219,17 +220,30 @@ This client requires the Minecraft WebSocket API mod to be installed on your ser
 2. Configure `config/mcwebapi-server.toml`:
    ```toml
    [websocket]
-       host = "0.0.0.0"
+       #WebSocket server port
+       # Default: 8765
+       # Range: 1000 ~ 65535
        port = 8765
-       authKey = "your-secret-key"
+       #Authentication key for binary protocol
+       authKey = "default-secret-key-change-me"
+       #Enable TLS/SSL encryption
+       enableSSL = false
+       #Request timeout in seconds
+       # Default: 30
+       # Range: 1 ~ 300
+       timeout = 30
+       #Allowed origins for CORS
+       allowedOrigins = "*"
+       #WebSocket server host
+       host = "0.0.0.0"
    ```
-3. Restart the server
+3. Restart the server or just join the world
 
 ## Requirements
 
 - Python 3.7+
 - `websocket-client>=1.3.0`
-- Minecraft server with mcwebapi mod installed
+- Minecraft with mcwebapi mod installed
 
 ## Error Handling
 
@@ -238,7 +252,12 @@ from mcwebapi import MinecraftAPI
 
 with MinecraftAPI() as api:
     try:
-        result = api.player.getHealth("NonExistentPlayer").wait()
+        result = api.Player("NonExistentPlayer").getHealth().wait()  # returns None
+
+        print(result)
+
+        api.Player("Steve").teleportTo('', 0)  # not enough arguments, will raise an exception
+        api.Player("Steve").teleportTo('', 0, 0, 8574843685768364873)  # in other cases that produce exceptions in game, will propagate them there
     except TimeoutError:
         print("Request timed out")
     except Exception as e:
@@ -248,7 +267,7 @@ with MinecraftAPI() as api:
 Common exceptions:
 - `ConnectionError` - Failed to connect or not authenticated
 - `TimeoutError` - Request exceeded timeout duration
-- `Exception` - Server-side errors (player not found, invalid arguments, etc.)
+- `Exception` - Server-side errors (invalid arguments, etc.)
 
 ## Configuration
 
@@ -279,15 +298,6 @@ cd mcwebapi
 pip install -e .
 ```
 
-### Testing
-
-```bash
-# Run example
-python main.py
-
-# With custom server
-python main.py --host 192.168.1.100 --port 8765 --key mysecret
-```
 
 ## Protocol Details
 
@@ -319,8 +329,6 @@ The client uses WebSocket communication with Base64-encoded JSON messages:
 ## Roadmap
 
 - [ ] Async/await support with asyncio
-- [ ] Connection pooling
-- [ ] Automatic reconnection
 - [ ] Event subscriptions (player join/leave, block changes)
 - [ ] Batch operations
 - [ ] Response caching
@@ -328,10 +336,6 @@ The client uses WebSocket communication with Base64-encoded JSON messages:
 ## Contributing
 
 Contributions welcome! Please open an issue or PR on [GitHub](https://github.com/addavriance/mcwebapi).
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file
 
 ## Links
 
