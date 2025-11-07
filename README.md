@@ -1,15 +1,22 @@
-# mcwebapi
+<div align="center">
 
-# WARNING: This package is under active development.
-## This package is not yet ready for production use! Many things and specifications may change
+<img width="220" height="220" alt="mcwebapi" src="https://github.com/user-attachments/assets/bcda77d5-f67b-417d-b958-cc65e3627324" />
 
-
+<h1>Minecraft Websocket API</h1>
+<p>
+    <strong>
+        Python client library for the 
+        <a href="https://github.com/addavriance/MinecraftWebsocketAPI">Minecraft WebSocket API</a>
+        mod
+    </strong>
+</p>
 
 [![PyPI](https://img.shields.io/pypi/v/mcwebapi?style=for-the-badge&logo=pypi&labelColor=black&color=blue)](https://pypi.org/project/mcwebapi/)
 [![Python](https://img.shields.io/pypi/pyversions/mcwebapi?style=for-the-badge&logo=python&labelColor=black)](https://pypi.org/project/mcwebapi/)
 [![Downloads](https://img.shields.io/pypi/dm/mcwebapi?style=for-the-badge&labelColor=black&color=green)](https://pypi.org/project/mcwebapi/)
 
-Python client library for the [Minecraft WebSocket API](https://github.com/addavriance/MinecraftWebsocketAPI) mod. Control your Minecraft server programmatically with a clean, async-ready API.
+Control your Minecraft server programmatically with a clean, async-ready API.
+</div>
 
 ## Quick Start
 
