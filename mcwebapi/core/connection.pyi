@@ -5,7 +5,7 @@ This module provides type hints for the async WebSocket connection management.
 
 from typing import Any, Callable, Dict, Optional
 import asyncio
-from websockets.client import WebSocketClientProtocol
+from websockets.asyncio.client import ClientConnection
 
 class ConnectionManager:
     """Manages async WebSocket connection to Minecraft server.
@@ -23,7 +23,7 @@ class ConnectionManager:
 
     host: str
     port: int
-    ws: Optional[WebSocketClientProtocol]
+    ws: Optional[ClientConnection]
     _receiver_task: Optional[asyncio.Task]
     _connected: bool
 
