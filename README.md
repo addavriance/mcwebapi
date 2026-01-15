@@ -1,9 +1,15 @@
-# mcwebapi
+<div align="center">
 
-# WARNING: This package is under active development.
-## This package is not yet ready for production use! Many things and specifications may change
+<img width="220" height="220" alt="mcwebapi" src="https://github.com/user-attachments/assets/bcda77d5-f67b-417d-b958-cc65e3627324" />
 
-
+<h1>Minecraft Websocket API</h1>
+<p>
+    <strong>
+        Python client library for the 
+        <a href="https://github.com/addavriance/MinecraftWebsocketAPI">Minecraft WebSocket API</a>
+        mod
+    </strong>
+</p>
 
 [![PyPI](https://img.shields.io/pypi/v/mcwebapi?style=for-the-badge&logo=pypi&labelColor=black&color=blue)](https://pypi.org/project/mcwebapi/)
 [![Python](https://img.shields.io/pypi/pyversions/mcwebapi?style=for-the-badge&logo=python&labelColor=black)](https://pypi.org/project/mcwebapi/)
@@ -408,7 +414,7 @@ This client requires the Minecraft WebSocket API mod to be installed on your ser
 
 - Python 3.8+
 - `websockets>=12.0`
-- Minecraft 1.21.1 server with mcwebapi mod installed
+- Minecraft 1.21.1 client or server with mcwebapi mod installed
 
 ## Error Handling
 
