@@ -9,6 +9,9 @@ from .objects.player import Player
 from .objects.block import Block
 from .objects.level import Level
 from .objects.command import Command
+from .objects.server import Server
+from .objects.entity import Entity
+from .objects.scoreboard import Scoreboard
 
 class MinecraftAPI:
     """High-level API for interacting with Minecraft server via WebSocket.
@@ -117,5 +120,32 @@ class MinecraftAPI:
 
         Returns:
             Command instance
+        """
+        ...
+
+    def Server(self) -> Server:
+        """Create a Server instance.
+
+        Returns:
+            Server instance
+        """
+        ...
+
+    def Entity(self, level_id: str) -> Entity:
+        """Create an Entity instance.
+
+        Args:
+            level_id: Level/dimension ID where entities will be managed
+
+        Returns:
+            Entity instance
+        """
+        ...
+
+    def Scoreboard(self) -> Scoreboard:
+        """Create a Scoreboard instance.
+
+        Returns:
+            Scoreboard instance
         """
         ...

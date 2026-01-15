@@ -11,6 +11,9 @@ from .objects.player import Player
 from .objects.block import Block
 from .objects.level import Level
 from .objects.command import Command
+from .objects.server import Server
+from .objects.entity import Entity
+from .objects.scoreboard import Scoreboard
 
 __version__: str
 
@@ -22,4 +25,7 @@ __all__ = [
     "Block",
     "Level",
     "Command",
+    "Server",
+    "Entity",
+    "Scoreboard",
 ]

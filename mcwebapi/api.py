@@ -1,7 +1,7 @@
 import time
 
 from .core import MinecraftClient
-from .objects import Player, Level, Command, Block
+from .objects import Player, Level, Command, Block, Server, Entity, Scoreboard
 
 
 class MinecraftAPI:
@@ -63,3 +63,12 @@ class MinecraftAPI:
 
     def Block(self, *identifiers) -> Block:
         return Block(self._client, *identifiers)
+
+    def Server(self) -> Server:
+        return Server(self._client)
+
+    def Entity(self, level_id: str) -> Entity:
+        return Entity(self._client, level_id)
+
+    def Scoreboard(self) -> Scoreboard:
+        return Scoreboard(self._client)
