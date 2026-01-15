@@ -1,16 +1,15 @@
-# Example - Async/Await API
 import asyncio
 from mcwebapi import MinecraftAPI
 
 
 async def main():
-    """Example showing basic async usage of mcwebapi."""
+    """Example showing dataclass usage with IDE autocomplete."""
 
     # Using async context manager (recommended)
     async with MinecraftAPI() as api:
         player = api.Player("Dev")
 
-        # Get player coordinates
+        # Get player coordinates (typed as float)
         x = await player.getX()
         y = await player.getY()
         z = await player.getZ()
@@ -19,7 +18,7 @@ async def main():
 
         # Or get all at once
         position = await player.getPosition()
-        print(f"Full position: {position}")
+        print(f"Full position: x={position.x}, y={position.y}, z={position.z}")
 
         # Get player health and food
         health = await player.getHealth()
@@ -36,6 +35,15 @@ async def main():
         )
 
         print(f"Health: {health}, Food: {food}, GameMode: {gamemode}")
+
+        player_info = await player.getPlayerInfo()
+        print(f"\nPlayer Info:")
+        print(f"  Name: {player_info.name}")
+        print(f"  UUID: {player_info.uuid}")
+        print(f"  Health: {player_info.health}/{player_info.maxHealth}")
+        print(f"  Game Mode: {player_info.gameMode}")
+        print(f"  World: {player_info.world}")
+        print(f"  Is Flying: {player_info.isFlying}")
 
 
 async def advanced_example():

@@ -1,6 +1,8 @@
 import logging
 import asyncio
 import websockets
+from websockets.asyncio.client import ClientConnection, connect
+from websockets.protocol import State
 import json
 import base64
 from typing import Optional, Callable
@@ -17,7 +19,7 @@ class ConnectionManager:
     def __init__(self, host: str = "localhost", port: int = 8765):
         self.host = host
         self.port = port
-        self.ws: Optional[websockets.WebSocketClientProtocol] = None
+        self.ws: Optional[ClientConnection] = None
         self._connected = False
         self._receiver_task: Optional[asyncio.Task] = None
         self._message_handler: Optional[Callable] = None
@@ -27,7 +29,7 @@ class ConnectionManager:
         ws_url = f"ws://{self.host}:{self.port}/"
         logging.info(f"Connecting to {ws_url}")
 
-        self.ws = await websockets.connect(ws_url)
+        self.ws = await connect(ws_url)
         self._connected = True
 
     async def disconnect(self) -> None:
@@ -44,11 +46,11 @@ class ConnectionManager:
 
     def is_connected(self) -> bool:
         """Check if connected to server."""
-        return self._connected and self.ws is not None and not self.ws.closed
+        return self._connected and self.ws is not None and self.ws.state == State.OPEN
 
     async def send_message(self, message: dict) -> None:
         """Send encoded message through WebSocket."""
-        if not self.is_connected():
+        if not self.is_connected() or self.ws is None:
             raise ConnectionError("Not connected to server")
 
         encoded_message = self._encode_message(message)

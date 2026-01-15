@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Dict, Optional, Awaitable
+from typing import Any, Tuple, Dict, Callable, Awaitable
 
 from ..core.client import MinecraftClient
 
@@ -11,7 +11,7 @@ class SocketInstance:
         self._client = client
         self.entry_args = list(args)
 
-    def __getattr__(self, name: str) -> callable:
+    def __getattr__(self, name: str) -> Callable[..., Awaitable[Any]]:
         async def server_method(*args: Any, **kwargs: Any) -> Any:
             final_args = self._process_args(args, kwargs)
             return await self._client.send_request(
