@@ -4,9 +4,9 @@ This module provides type hints for the base class that all Minecraft
 API objects inherit from.
 """
 
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Callable, Dict, Tuple
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class SocketInstance:
     """Base class for all Minecraft API objects.
@@ -26,7 +26,7 @@ class SocketInstance:
 
     def __init__(self, name: str, client: MinecraftClient, *args: Any) -> None: ...
 
-    def __getattr__(self, name: str) -> Callable[..., Promise[Any]]:
+    def __getattr__(self, name: str) -> Callable[..., Coroutine[Any, Any, Any]]:
         """Dynamically create method that sends request to backend.
 
         Args:

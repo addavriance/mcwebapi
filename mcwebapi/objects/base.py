@@ -1,10 +1,10 @@
-from typing import Any, Tuple, Dict, Optional
+from typing import Any, Tuple, Dict, Optional, Awaitable
 
-from ..api import MinecraftClient
+from ..core.client import MinecraftClient
 
 
 class SocketInstance:
-    """Base class for all API entities"""
+    """Base class for all async API entities"""
 
     def __init__(self, name: str, client: MinecraftClient, *args):
         self.module_name = name
@@ -12,9 +12,9 @@ class SocketInstance:
         self.entry_args = list(args)
 
     def __getattr__(self, name: str) -> callable:
-        def server_method(*args: Any, **kwargs: Any) -> Any:
+        async def server_method(*args: Any, **kwargs: Any) -> Any:
             final_args = self._process_args(args, kwargs)
-            return self._client.send_request(
+            return await self._client.send_request(
                 module=self.module_name,
                 method=name,
                 args=final_args

@@ -7,9 +7,9 @@ Note: Scoreboard module methods don't require an identifier, as they operate
 on the global server scoreboard.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class Scoreboard:
     """Represents the Minecraft scoreboard system.
@@ -24,7 +24,7 @@ class Scoreboard:
 
     def createObjective(
         self, name: str, criteriaId: str, displayName: str
-    ) -> Promise[bool]:
+    ) -> Coroutine[Any, Any, bool]:
         """Create scoreboard objective.
 
         Args:
@@ -37,7 +37,7 @@ class Scoreboard:
         """
         ...
 
-    def removeObjective(self, name: str) -> Promise[bool]:
+    def removeObjective(self, name: str) -> Coroutine[Any, Any, bool]:
         """Remove objective by name.
 
         Args:
@@ -48,7 +48,7 @@ class Scoreboard:
         """
         ...
 
-    def getObjectives(self) -> Promise[List[Dict[str, Any]]]:
+    def getObjectives(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get all objectives.
 
         Returns:
@@ -60,7 +60,7 @@ class Scoreboard:
         """
         ...
 
-    def getObjective(self, name: str) -> Promise[Dict[str, Any]]:
+    def getObjective(self, name: str) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get objective by name.
 
         Args:
@@ -71,7 +71,7 @@ class Scoreboard:
         """
         ...
 
-    def setDisplaySlot(self, slot: str, objectiveName: str) -> Promise[bool]:
+    def setDisplaySlot(self, slot: str, objectiveName: str) -> Coroutine[Any, Any, bool]:
         """Set objective to display slot.
 
         Args:
@@ -83,7 +83,7 @@ class Scoreboard:
         """
         ...
 
-    def getDisplaySlots(self) -> Promise[Dict[str, Optional[str]]]:
+    def getDisplaySlots(self) -> Coroutine[Any, Any, Dict[str, Optional[str]]]:
         """Get all display slots and their objectives.
 
         Returns:
@@ -93,7 +93,7 @@ class Scoreboard:
 
     # ===== TEAMS =====
 
-    def createTeam(self, name: str) -> Promise[bool]:
+    def createTeam(self, name: str) -> Coroutine[Any, Any, bool]:
         """Create team.
 
         Args:
@@ -104,7 +104,7 @@ class Scoreboard:
         """
         ...
 
-    def removeTeam(self, name: str) -> Promise[bool]:
+    def removeTeam(self, name: str) -> Coroutine[Any, Any, bool]:
         """Remove team by name.
 
         Args:
@@ -115,7 +115,7 @@ class Scoreboard:
         """
         ...
 
-    def getTeams(self) -> Promise[List[Dict[str, Any]]]:
+    def getTeams(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get all teams.
 
         Returns:
@@ -131,7 +131,7 @@ class Scoreboard:
         """
         ...
 
-    def getTeam(self, name: str) -> Promise[Dict[str, Any]]:
+    def getTeam(self, name: str) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get team by name.
 
         Args:
@@ -142,7 +142,7 @@ class Scoreboard:
         """
         ...
 
-    def addPlayerToTeam(self, teamName: str, playerName: str) -> Promise[bool]:
+    def addPlayerToTeam(self, teamName: str, playerName: str) -> Coroutine[Any, Any, bool]:
         """Add player to team.
 
         Args:
@@ -154,7 +154,7 @@ class Scoreboard:
         """
         ...
 
-    def removePlayerFromTeam(self, playerName: str) -> Promise[bool]:
+    def removePlayerFromTeam(self, playerName: str) -> Coroutine[Any, Any, bool]:
         """Remove player from their team.
 
         Args:
@@ -165,7 +165,7 @@ class Scoreboard:
         """
         ...
 
-    def setTeamDisplayName(self, teamName: str, displayName: str) -> Promise[bool]:
+    def setTeamDisplayName(self, teamName: str, displayName: str) -> Coroutine[Any, Any, bool]:
         """Set team display name.
 
         Args:
@@ -177,7 +177,7 @@ class Scoreboard:
         """
         ...
 
-    def setTeamColor(self, teamName: str, colorName: str) -> Promise[bool]:
+    def setTeamColor(self, teamName: str, colorName: str) -> Coroutine[Any, Any, bool]:
         """Set team color.
 
         Args:
@@ -189,7 +189,7 @@ class Scoreboard:
         """
         ...
 
-    def setTeamPrefix(self, teamName: str, prefix: str) -> Promise[bool]:
+    def setTeamPrefix(self, teamName: str, prefix: str) -> Coroutine[Any, Any, bool]:
         """Set team name prefix.
 
         Args:
@@ -201,7 +201,7 @@ class Scoreboard:
         """
         ...
 
-    def setTeamSuffix(self, teamName: str, suffix: str) -> Promise[bool]:
+    def setTeamSuffix(self, teamName: str, suffix: str) -> Coroutine[Any, Any, bool]:
         """Set team name suffix.
 
         Args:
@@ -213,7 +213,7 @@ class Scoreboard:
         """
         ...
 
-    def setTeamFriendlyFire(self, teamName: str, enabled: bool) -> Promise[bool]:
+    def setTeamFriendlyFire(self, teamName: str, enabled: bool) -> Coroutine[Any, Any, bool]:
         """Set team friendly fire.
 
         Args:
@@ -225,7 +225,7 @@ class Scoreboard:
         """
         ...
 
-    def setTeamSeeFriendlyInvisibles(self, teamName: str, enabled: bool) -> Promise[bool]:
+    def setTeamSeeFriendlyInvisibles(self, teamName: str, enabled: bool) -> Coroutine[Any, Any, bool]:
         """Set whether team members can see friendly invisibles.
 
         Args:
@@ -239,7 +239,7 @@ class Scoreboard:
 
     # ===== SCORES =====
 
-    def getScore(self, objectiveName: str, target: str) -> Promise[Optional[int]]:
+    def getScore(self, objectiveName: str, target: str) -> Coroutine[Any, Any, Optional[int]]:
         """Get score for target in objective.
 
         Args:
@@ -251,7 +251,7 @@ class Scoreboard:
         """
         ...
 
-    def setScore(self, objectiveName: str, target: str, value: int) -> Promise[bool]:
+    def setScore(self, objectiveName: str, target: str, value: int) -> Coroutine[Any, Any, bool]:
         """Set score for target in objective.
 
         Args:
@@ -264,7 +264,7 @@ class Scoreboard:
         """
         ...
 
-    def addScore(self, objectiveName: str, target: str, value: int) -> Promise[bool]:
+    def addScore(self, objectiveName: str, target: str, value: int) -> Coroutine[Any, Any, bool]:
         """Add to score for target in objective.
 
         Args:
@@ -277,7 +277,7 @@ class Scoreboard:
         """
         ...
 
-    def resetScore(self, objectiveName: str, target: str) -> Promise[bool]:
+    def resetScore(self, objectiveName: str, target: str) -> Coroutine[Any, Any, bool]:
         """Reset score for target in objective.
 
         Args:
@@ -289,7 +289,7 @@ class Scoreboard:
         """
         ...
 
-    def resetAllScores(self, target: str) -> Promise[bool]:
+    def resetAllScores(self, target: str) -> Coroutine[Any, Any, bool]:
         """Reset all scores for target across all objectives.
 
         Args:
@@ -300,7 +300,7 @@ class Scoreboard:
         """
         ...
 
-    def getScores(self, target: str) -> Promise[Dict[str, int]]:
+    def getScores(self, target: str) -> Coroutine[Any, Any, Dict[str, int]]:
         """Get all scores for target.
 
         Args:
@@ -311,7 +311,7 @@ class Scoreboard:
         """
         ...
 
-    def getObjectiveScores(self, objectiveName: str) -> Promise[Dict[str, int]]:
+    def getObjectiveScores(self, objectiveName: str) -> Coroutine[Any, Any, Dict[str, int]]:
         """Get all scores in objective.
 
         Args:

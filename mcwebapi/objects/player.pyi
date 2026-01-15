@@ -10,7 +10,7 @@ all backend methods.
 
 from typing import Any, Dict, List, Optional
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class Player:
     """Represents a Minecraft player.
@@ -23,49 +23,49 @@ class Player:
     def __init__(self, client: MinecraftClient, identifier: str) -> None: ...
 
     # Health & Stats
-    def getHealth(self) -> Promise[float]:
+    def getHealth(self) -> Coroutine[Any, Any, float]:
         """Get player health (hp value or -1.0 if player not found)."""
         ...
 
-    def setHealth(self, health: float) -> Promise[bool]:
+    def setHealth(self, health: float) -> Coroutine[Any, Any, bool]:
         """Set player health."""
         ...
 
-    def getMaxHealth(self) -> Promise[float]:
+    def getMaxHealth(self) -> Coroutine[Any, Any, float]:
         """Get player maximum health."""
         ...
 
     # Food & Saturation
-    def getFood(self) -> Promise[int]:
+    def getFood(self) -> Coroutine[Any, Any, int]:
         """Get player food level (0-20)."""
         ...
 
-    def setFood(self, foodLevel: int) -> Promise[bool]:
+    def setFood(self, foodLevel: int) -> Coroutine[Any, Any, bool]:
         """Set player food level."""
         ...
 
-    def getSaturation(self) -> Promise[float]:
+    def getSaturation(self) -> Coroutine[Any, Any, float]:
         """Get player saturation level."""
         ...
 
-    def setSaturation(self, saturation: float) -> Promise[bool]:
+    def setSaturation(self, saturation: float) -> Coroutine[Any, Any, bool]:
         """Set player saturation level."""
         ...
 
     # Position & Teleportation
-    def getX(self) -> Promise[Optional[float]]:
+    def getX(self) -> Coroutine[Any, Any, Optional[float]]:
         """Get player X coordinate."""
         ...
 
-    def getY(self) -> Promise[Optional[float]]:
+    def getY(self) -> Coroutine[Any, Any, Optional[float]]:
         """Get player Y coordinate."""
         ...
 
-    def getZ(self) -> Promise[Optional[float]]:
+    def getZ(self) -> Coroutine[Any, Any, Optional[float]]:
         """Get player Z coordinate."""
         ...
 
-    def getPosition(self) -> Promise[Dict[str, float]]:
+    def getPosition(self) -> Coroutine[Any, Any, Dict[str, float]]:
         """Get player position.
 
         Returns:
@@ -73,17 +73,17 @@ class Player:
         """
         ...
 
-    def teleport(self, x: float, y: float, z: float) -> Promise[bool]:
+    def teleport(self, x: float, y: float, z: float) -> Coroutine[Any, Any, bool]:
         """Teleport player to coordinates."""
         ...
 
-    def teleportTo(self, targetIdentifier: str) -> Promise[bool]:
+    def teleportTo(self, targetIdentifier: str) -> Coroutine[Any, Any, bool]:
         """Teleport player to another player."""
         ...
 
     def teleportToDimension(
         self, dimension: str, x: float, y: float, z: float
-    ) -> Promise[bool]:
+    ) -> Coroutine[Any, Any, bool]:
         """Teleport player to another dimension.
 
         Args:
@@ -95,7 +95,7 @@ class Player:
         ...
 
     # Rotation & Velocity
-    def getRotation(self) -> Promise[Dict[str, float]]:
+    def getRotation(self) -> Coroutine[Any, Any, Dict[str, float]]:
         """Get player rotation.
 
         Returns:
@@ -103,11 +103,11 @@ class Player:
         """
         ...
 
-    def setRotation(self, yaw: float, pitch: float) -> Promise[bool]:
+    def setRotation(self, yaw: float, pitch: float) -> Coroutine[Any, Any, bool]:
         """Set player rotation."""
         ...
 
-    def getVelocity(self) -> Promise[Dict[str, float]]:
+    def getVelocity(self) -> Coroutine[Any, Any, Dict[str, float]]:
         """Get player velocity.
 
         Returns:
@@ -115,12 +115,12 @@ class Player:
         """
         ...
 
-    def setVelocity(self, x: float, y: float, z: float) -> Promise[bool]:
+    def setVelocity(self, x: float, y: float, z: float) -> Coroutine[Any, Any, bool]:
         """Set player velocity."""
         ...
 
     # Experience
-    def getExperience(self) -> Promise[Dict[str, int]]:
+    def getExperience(self) -> Coroutine[Any, Any, Dict[str, int]]:
         """Get player experience.
 
         Returns:
@@ -128,12 +128,12 @@ class Player:
         """
         ...
 
-    def setExperience(self, level: int) -> Promise[bool]:
+    def setExperience(self, level: int) -> Coroutine[Any, Any, bool]:
         """Set player experience level."""
         ...
 
     # Game Mode
-    def getGameMode(self) -> Promise[str]:
+    def getGameMode(self) -> Coroutine[Any, Any, str]:
         """Get player game mode.
 
         Returns:
@@ -141,7 +141,7 @@ class Player:
         """
         ...
 
-    def setGameMode(self, gameMode: str) -> Promise[bool]:
+    def setGameMode(self, gameMode: str) -> Coroutine[Any, Any, bool]:
         """Set player game mode.
 
         Args:
@@ -150,7 +150,7 @@ class Player:
         ...
 
     # Inventory & Items
-    def getInventory(self) -> Promise[List[Dict[str, Any]]]:
+    def getInventory(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get player inventory.
 
         Returns:
@@ -158,11 +158,11 @@ class Player:
         """
         ...
 
-    def clearInventory(self) -> Promise[bool]:
+    def clearInventory(self) -> Coroutine[Any, Any, bool]:
         """Clear player inventory."""
         ...
 
-    def getArmor(self) -> Promise[List[Dict[str, Any]]]:
+    def getArmor(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get player armor.
 
         Returns:
@@ -170,7 +170,7 @@ class Player:
         """
         ...
 
-    def getEnderChest(self) -> Promise[List[Dict[str, Any]]]:
+    def getEnderChest(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get player ender chest contents.
 
         Returns:
@@ -178,7 +178,7 @@ class Player:
         """
         ...
 
-    def giveItem(self, itemId: str, count: int) -> Promise[bool]:
+    def giveItem(self, itemId: str, count: int) -> Coroutine[Any, Any, bool]:
         """Give item to player.
 
         Args:
@@ -188,7 +188,7 @@ class Player:
         ...
 
     # Effects
-    def getEffects(self) -> Promise[List[Dict[str, Any]]]:
+    def getEffects(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get player active effects.
 
         Returns:
@@ -196,7 +196,7 @@ class Player:
         """
         ...
 
-    def addEffect(self, effect: str, duration: int, amplifier: int) -> Promise[bool]:
+    def addEffect(self, effect: str, duration: int, amplifier: int) -> Coroutine[Any, Any, bool]:
         """Add effect to player.
 
         Args:
@@ -206,12 +206,12 @@ class Player:
         """
         ...
 
-    def clearEffects(self) -> Promise[bool]:
+    def clearEffects(self) -> Coroutine[Any, Any, bool]:
         """Clear all player effects."""
         ...
 
     # Advancements & Scoring
-    def getAdvancements(self) -> Promise[Dict[str, Any]]:
+    def getAdvancements(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get player advancements.
 
         Returns:
@@ -219,7 +219,7 @@ class Player:
         """
         ...
 
-    def grantAdvancement(self, advancementId: str) -> Promise[bool]:
+    def grantAdvancement(self, advancementId: str) -> Coroutine[Any, Any, bool]:
         """Grant advancement to player.
 
         Args:
@@ -227,7 +227,7 @@ class Player:
         """
         ...
 
-    def revokeAdvancement(self, advancementId: str) -> Promise[bool]:
+    def revokeAdvancement(self, advancementId: str) -> Coroutine[Any, Any, bool]:
         """Revoke advancement from player.
 
         Args:
@@ -235,7 +235,7 @@ class Player:
         """
         ...
 
-    def getScore(self, objective: str) -> Promise[int]:
+    def getScore(self, objective: str) -> Coroutine[Any, Any, int]:
         """Get player score for objective.
 
         Args:
@@ -246,7 +246,7 @@ class Player:
         """
         ...
 
-    def setScore(self, objective: str, score: int) -> Promise[bool]:
+    def setScore(self, objective: str, score: int) -> Coroutine[Any, Any, bool]:
         """Set player score for objective.
 
         Args:
@@ -256,15 +256,15 @@ class Player:
         ...
 
     # Info & Status
-    def getUUID(self) -> Promise[Optional[str]]:
+    def getUUID(self) -> Coroutine[Any, Any, Optional[str]]:
         """Get player UUID."""
         ...
 
-    def isOnline(self) -> Promise[bool]:
+    def isOnline(self) -> Coroutine[Any, Any, bool]:
         """Check if player is online."""
         ...
 
-    def getPing(self) -> Promise[int]:
+    def getPing(self) -> Coroutine[Any, Any, int]:
         """Get player latency in milliseconds.
 
         Returns:
@@ -272,7 +272,7 @@ class Player:
         """
         ...
 
-    def getWorld(self) -> Promise[str]:
+    def getWorld(self) -> Coroutine[Any, Any, str]:
         """Get player current world/dimension.
 
         Returns:
@@ -280,7 +280,7 @@ class Player:
         """
         ...
 
-    def getPlayerInfo(self) -> Promise[Dict[str, Any]]:
+    def getPlayerInfo(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get comprehensive player information.
 
         Returns:
@@ -288,7 +288,7 @@ class Player:
         """
         ...
 
-    def sendMessage(self, message: str) -> Promise[bool]:
+    def sendMessage(self, message: str) -> Coroutine[Any, Any, bool]:
         """Send message to player.
 
         Args:
@@ -296,7 +296,7 @@ class Player:
         """
         ...
 
-    def kick(self, reason: str) -> Promise[bool]:
+    def kick(self, reason: str) -> Coroutine[Any, Any, bool]:
         """Kick player from server.
 
         Args:

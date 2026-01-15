@@ -8,9 +8,9 @@ construction and is automatically sent as the first argument to all
 backend methods.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Dict, List
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class Level:
     """Represents a Minecraft world/dimension level.
@@ -27,7 +27,7 @@ class Level:
     def __init__(self, client: MinecraftClient, identifier: str) -> None: ...
 
     # Block Operations
-    def setBlock(self, blockId: str, x: int, y: int, z: int) -> Promise[bool]:
+    def setBlock(self, blockId: str, x: int, y: int, z: int) -> Coroutine[Any, Any, bool]:
         """Set block at position.
 
         Args:
@@ -41,7 +41,7 @@ class Level:
         """
         ...
 
-    def getBlock(self, x: int, y: int, z: int) -> Promise[str]:
+    def getBlock(self, x: int, y: int, z: int) -> Coroutine[Any, Any, str]:
         """Get block type at position.
 
         Args:
@@ -54,7 +54,7 @@ class Level:
         """
         ...
 
-    def getBlockState(self, x: int, y: int, z: int) -> Promise[Dict[str, Any]]:
+    def getBlockState(self, x: int, y: int, z: int) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get detailed block state information.
 
         Args:
@@ -72,7 +72,7 @@ class Level:
         ...
 
     # Time & Weather
-    def getDayTime(self) -> Promise[int]:
+    def getDayTime(self) -> Coroutine[Any, Any, int]:
         """Get current day time in ticks.
 
         Returns:
@@ -80,7 +80,7 @@ class Level:
         """
         ...
 
-    def setDayTime(self, time: int) -> Promise[bool]:
+    def setDayTime(self, time: int) -> Coroutine[Any, Any, bool]:
         """Set day time.
 
         Args:
@@ -91,7 +91,7 @@ class Level:
         """
         ...
 
-    def getTotalTime(self) -> Promise[int]:
+    def getTotalTime(self) -> Coroutine[Any, Any, int]:
         """Get total world time since creation.
 
         Returns:
@@ -99,7 +99,7 @@ class Level:
         """
         ...
 
-    def isDay(self) -> Promise[bool]:
+    def isDay(self) -> Coroutine[Any, Any, bool]:
         """Check if it's daytime.
 
         Returns:
@@ -107,7 +107,7 @@ class Level:
         """
         ...
 
-    def isNight(self) -> Promise[bool]:
+    def isNight(self) -> Coroutine[Any, Any, bool]:
         """Check if it's nighttime.
 
         Returns:
@@ -115,7 +115,7 @@ class Level:
         """
         ...
 
-    def getMoonPhase(self) -> Promise[int]:
+    def getMoonPhase(self) -> Coroutine[Any, Any, int]:
         """Get current moon phase.
 
         Returns:
@@ -123,7 +123,7 @@ class Level:
         """
         ...
 
-    def getWeather(self) -> Promise[Dict[str, Any]]:
+    def getWeather(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get weather information.
 
         Returns:
@@ -135,7 +135,7 @@ class Level:
         """
         ...
 
-    def setWeather(self, raining: bool, thundering: bool) -> Promise[bool]:
+    def setWeather(self, raining: bool, thundering: bool) -> Coroutine[Any, Any, bool]:
         """Set weather.
 
         Args:
@@ -148,7 +148,7 @@ class Level:
         ...
 
     # World Border
-    def getWorldBorder(self) -> Promise[Dict[str, Any]]:
+    def getWorldBorder(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get world border information.
 
         Returns:
@@ -163,7 +163,7 @@ class Level:
         """
         ...
 
-    def setWorldBorder(self, centerX: float, centerZ: float, size: float) -> Promise[bool]:
+    def setWorldBorder(self, centerX: float, centerZ: float, size: float) -> Coroutine[Any, Any, bool]:
         """Set world border.
 
         Args:
@@ -177,7 +177,7 @@ class Level:
         ...
 
     # Terrain & Height
-    def getHeight(self, x: int, z: int, heightmapType: str) -> Promise[int]:
+    def getHeight(self, x: int, z: int, heightmapType: str) -> Coroutine[Any, Any, int]:
         """Get terrain height at position.
 
         Args:
@@ -190,7 +190,7 @@ class Level:
         """
         ...
 
-    def getLightLevel(self, x: int, y: int, z: int) -> Promise[int]:
+    def getLightLevel(self, x: int, y: int, z: int) -> Coroutine[Any, Any, int]:
         """Get light level at position.
 
         Args:
@@ -204,7 +204,7 @@ class Level:
         ...
 
     # Spawn & Difficulty
-    def getSpawnPoint(self) -> Promise[Dict[str, Any]]:
+    def getSpawnPoint(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get world spawn point.
 
         Returns:
@@ -216,7 +216,7 @@ class Level:
         """
         ...
 
-    def setSpawnPoint(self, x: int, y: int, z: int, angle: float) -> Promise[bool]:
+    def setSpawnPoint(self, x: int, y: int, z: int, angle: float) -> Coroutine[Any, Any, bool]:
         """Set world spawn point.
 
         Args:
@@ -230,7 +230,7 @@ class Level:
         """
         ...
 
-    def getDifficulty(self) -> Promise[str]:
+    def getDifficulty(self) -> Coroutine[Any, Any, str]:
         """Get world difficulty.
 
         Returns:
@@ -238,7 +238,7 @@ class Level:
         """
         ...
 
-    def setDifficulty(self, difficulty: str) -> Promise[bool]:
+    def setDifficulty(self, difficulty: str) -> Coroutine[Any, Any, bool]:
         """Set world difficulty.
 
         Args:
@@ -250,7 +250,7 @@ class Level:
         ...
 
     # Entities & Players
-    def getPlayers(self) -> Promise[List[str]]:
+    def getPlayers(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of player names in this level.
 
         Returns:
@@ -258,7 +258,7 @@ class Level:
         """
         ...
 
-    def getEntities(self) -> Promise[List[str]]:
+    def getEntities(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of entity type IDs in this level.
 
         Returns:
@@ -266,7 +266,7 @@ class Level:
         """
         ...
 
-    def getEntityCount(self) -> Promise[int]:
+    def getEntityCount(self) -> Coroutine[Any, Any, int]:
         """Get total entity count in level.
 
         Returns:
@@ -274,7 +274,7 @@ class Level:
         """
         ...
 
-    def getPlayerCount(self) -> Promise[int]:
+    def getPlayerCount(self) -> Coroutine[Any, Any, int]:
         """Get player count in level.
 
         Returns:
@@ -282,7 +282,7 @@ class Level:
         """
         ...
 
-    def sendMessageToAll(self, message: str) -> Promise[bool]:
+    def sendMessageToAll(self, message: str) -> Coroutine[Any, Any, bool]:
         """Send message to all players in level.
 
         Args:
@@ -294,7 +294,7 @@ class Level:
         ...
 
     # Chunks
-    def getChunkInfo(self, chunkX: int, chunkZ: int) -> Promise[Dict[str, Any]]:
+    def getChunkInfo(self, chunkX: int, chunkZ: int) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get chunk information.
 
         Args:
@@ -310,7 +310,7 @@ class Level:
         """
         ...
 
-    def loadChunk(self, chunkX: int, chunkZ: int) -> Promise[bool]:
+    def loadChunk(self, chunkX: int, chunkZ: int) -> Coroutine[Any, Any, bool]:
         """Load chunk.
 
         Args:
@@ -322,7 +322,7 @@ class Level:
         """
         ...
 
-    def unloadChunk(self, chunkX: int, chunkZ: int) -> Promise[bool]:
+    def unloadChunk(self, chunkX: int, chunkZ: int) -> Coroutine[Any, Any, bool]:
         """Unload chunk.
 
         Args:
@@ -335,7 +335,7 @@ class Level:
         ...
 
     # World Info
-    def getSeed(self) -> Promise[int]:
+    def getSeed(self) -> Coroutine[Any, Any, int]:
         """Get world seed.
 
         Returns:
@@ -343,7 +343,7 @@ class Level:
         """
         ...
 
-    def getLevelInfo(self) -> Promise[Dict[str, Any]]:
+    def getLevelInfo(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get comprehensive level information.
 
         Returns:
@@ -351,7 +351,7 @@ class Level:
         """
         ...
 
-    def getLevelData(self) -> Promise[Dict[str, Any]]:
+    def getLevelData(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get level data.
 
         Returns:
@@ -363,7 +363,7 @@ class Level:
         """
         ...
 
-    def getAvailableLevels(self) -> Promise[List[str]]:
+    def getAvailableLevels(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of all available dimensions.
 
         Returns:
@@ -372,7 +372,7 @@ class Level:
         ...
 
     # Advanced
-    def explode(self, x: float, y: float, z: float, power: float, fire: bool) -> Promise[bool]:
+    def explode(self, x: float, y: float, z: float, power: float, fire: bool) -> Coroutine[Any, Any, bool]:
         """Create explosion at position.
 
         Args:

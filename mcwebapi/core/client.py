@@ -1,16 +1,17 @@
 import logging
 import time
-from typing import Dict, Optional
+import asyncio
+from typing import Dict, Optional, Any
 
-from .promise import Promise
 from .connection import ConnectionManager
 
 
 class MinecraftClient:
     """
-    Main client for communicating with Minecraft WebSocket API.
+    Async client for communicating with Minecraft WebSocket API.
 
-    Handles request/response cycle, authentication, and high-level API operations.
+    Handles request/response cycle, authentication, and high-level API operations
+    using asyncio for efficient async/await patterns.
     """
 
     def __init__(
@@ -24,28 +25,28 @@ class MinecraftClient:
         self.timeout = timeout
 
         self.connection = ConnectionManager(host, port)
-        self._pending_requests: Dict[str, Promise] = {}
+        self._pending_requests: Dict[str, asyncio.Future] = {}
         self._authenticated = False
         self._message_id = 0
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Establish connection and authenticate with server."""
         try:
             # Establish WebSocket connection
-            self.connection.connect()
+            await self.connection.connect()
             self.connection.start_receiver(self._handle_message)
 
             # Authentication flow
-            self._authenticate()
+            await self._authenticate()
 
         except Exception as e:
-            self.connection.disconnect()
+            await self.connection.disconnect()
             raise ConnectionError(f"Failed to connect: {e}")
 
-    def disconnect(self) -> None:
+    async def disconnect(self) -> None:
         """Close connection and cleanup."""
         self._authenticated = False
-        self.connection.disconnect()
+        await self.connection.disconnect()
 
     def is_authenticated(self) -> bool:
         """Check authentication status."""
@@ -57,11 +58,11 @@ class MinecraftClient:
 
     def has_pending_requests(self) -> bool:
         """Check pending requests status."""
-        return self._pending_requests != {}
+        return len(self._pending_requests) > 0
 
-    def send_request(self, module: str, method: str, args: Optional[list] = None) -> Promise:
+    async def send_request(self, module: str, method: str, args: Optional[list] = None) -> Any:
         """
-        Send request to server and return a Promise.
+        Send request to server and return the result.
 
         Args:
             module: API module name (e.g., 'player', 'world')
@@ -69,10 +70,11 @@ class MinecraftClient:
             args: List of arguments for the method
 
         Returns:
-            Promise that will resolve with the response
+            The response data from the server
 
         Raises:
             ConnectionError: If not connected or authenticated
+            TimeoutError: If request times out
         """
         if not self.is_connected():
             raise ConnectionError("Not connected to server")
@@ -81,8 +83,8 @@ class MinecraftClient:
             raise ConnectionError("Not authenticated. Call connect() first.")
 
         request_id = self._generate_request_id()
-        promise = Promise(timeout=self.timeout)
-        self._pending_requests[request_id] = promise
+        future = asyncio.get_event_loop().create_future()
+        self._pending_requests[request_id] = future
 
         message = {
             "type": "REQUEST",
@@ -95,22 +97,29 @@ class MinecraftClient:
 
         try:
             logging.info(f"Sending message: {message}")
-            self.connection.send_message(message)
+            await self.connection.send_message(message)
         except Exception as e:
-            promise.reject(e)
+            future.set_exception(e)
             del self._pending_requests[request_id]
+            raise
 
-        return promise
+        # Wait for response with timeout
+        try:
+            result = await asyncio.wait_for(future, timeout=self.timeout)
+            return result
+        except asyncio.TimeoutError:
+            del self._pending_requests[request_id]
+            raise TimeoutError(f"Request timed out after {self.timeout}s")
 
-    def _authenticate(self) -> None:
+    async def _authenticate(self) -> None:
         """Perform authentication flow."""
-        check_result = self.send_request("auth", "check", []).wait()
+        check_result = await self.send_request("auth", "check", [])
         logging.info(f"Auth check (no auth): {check_result}")
 
-        auth_info = self.send_request("auth", "getInfo", []).wait()
+        auth_info = await self.send_request("auth", "getInfo", [])
         logging.info(f"Auth info: {auth_info}")
 
-        auth_result = self.send_request("auth", "authenticate", [self.auth_key]).wait()
+        auth_result = await self.send_request("auth", "authenticate", [self.auth_key])
         logging.info(f"Authentication result: {auth_result}")
 
         if auth_result.get("success"):
@@ -118,7 +127,7 @@ class MinecraftClient:
             logging.info("Successfully authenticated!")
 
             # Verify authentication
-            check_result = self.send_request("auth", "check", []).wait()
+            check_result = await self.send_request("auth", "check", [])
             logging.info(f"Auth check: {check_result}")
         else:
             raise ConnectionError(f"Authentication failed: {auth_result.get('message')}")
@@ -135,21 +144,21 @@ class MinecraftClient:
             if not request_id or request_id not in self._pending_requests:
                 return
 
-            promise = self._pending_requests.pop(request_id)
+            future = self._pending_requests.pop(request_id)
             message_type = message.get("type")
 
             if message_type == "RESPONSE":
                 if message.get("status") == "SUCCESS":
-                    promise.resolve(message.get("data"))
+                    future.set_result(message.get("data"))
                 else:
                     error_data = message.get("data", {})
                     error_msg = error_data.get("message", "Unknown error")
-                    promise.reject(Exception(f"{error_data.get('code', 'UNKNOWN')}: {error_msg}"))
+                    future.set_exception(Exception(f"{error_data.get('code', 'UNKNOWN')}: {error_msg}"))
 
             elif message_type == "ERROR":
                 error_data = message.get("data", {})
                 error_msg = error_data.get("message", "Unknown error")
-                promise.reject(Exception(f"{error_data.get('code', 'UNKNOWN')}: {error_msg}"))
+                future.set_exception(Exception(f"{error_data.get('code', 'UNKNOWN')}: {error_msg}"))
 
         except Exception as e:
             logging.error(f"Error handling message: {e}")

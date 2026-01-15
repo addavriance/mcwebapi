@@ -9,7 +9,7 @@ on the global server instance.
 
 from typing import Any, Dict, List
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class Server:
     """Represents the Minecraft server.
@@ -21,7 +21,7 @@ class Server:
     def __init__(self, client: MinecraftClient) -> None: ...
 
     # Server Information
-    def getInfo(self) -> Promise[Dict[str, Any]]:
+    def getInfo(self) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get comprehensive server information.
 
         Returns:
@@ -39,36 +39,36 @@ class Server:
         """
         ...
 
-    def getVersion(self) -> Promise[str]:
+    def getVersion(self) -> Coroutine[Any, Any, str]:
         """Get server version string."""
         ...
 
-    def getBrand(self) -> Promise[str]:
+    def getBrand(self) -> Coroutine[Any, Any, str]:
         """Get server brand (e.g., "NeoForge", "Forge", "Paper")."""
         ...
 
-    def getMotd(self) -> Promise[str]:
+    def getMotd(self) -> Coroutine[Any, Any, str]:
         """Get message of the day."""
         ...
 
-    def getMaxPlayers(self) -> Promise[int]:
+    def getMaxPlayers(self) -> Coroutine[Any, Any, int]:
         """Get maximum player count."""
         ...
 
-    def getOnlinePlayerCount(self) -> Promise[int]:
+    def getOnlinePlayerCount(self) -> Coroutine[Any, Any, int]:
         """Get current online player count."""
         ...
 
-    def getOnlinePlayers(self) -> Promise[List[str]]:
+    def getOnlinePlayers(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of online player names."""
         ...
 
-    def getOnlinePlayerUUIDs(self) -> Promise[List[str]]:
+    def getOnlinePlayerUUIDs(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of online player UUIDs."""
         ...
 
     # Performance Metrics
-    def getTPS(self) -> Promise[float]:
+    def getTPS(self) -> Coroutine[Any, Any, float]:
         """Get current server TPS (ticks per second).
 
         Returns:
@@ -76,7 +76,7 @@ class Server:
         """
         ...
 
-    def getAverageTPS(self) -> Promise[float]:
+    def getAverageTPS(self) -> Coroutine[Any, Any, float]:
         """Get average server TPS.
 
         Returns:
@@ -84,15 +84,15 @@ class Server:
         """
         ...
 
-    def getTickCount(self) -> Promise[int]:
+    def getTickCount(self) -> Coroutine[Any, Any, int]:
         """Get total ticks since server start."""
         ...
 
-    def getUptime(self) -> Promise[int]:
+    def getUptime(self) -> Coroutine[Any, Any, int]:
         """Get server uptime in milliseconds."""
         ...
 
-    def getMemoryUsage(self) -> Promise[Dict[str, int]]:
+    def getMemoryUsage(self) -> Coroutine[Any, Any, Dict[str, int]]:
         """Get JVM memory usage.
 
         Returns:
@@ -105,7 +105,7 @@ class Server:
         ...
 
     # Server Settings
-    def getDifficulty(self) -> Promise[str]:
+    def getDifficulty(self) -> Coroutine[Any, Any, str]:
         """Get server difficulty.
 
         Returns:
@@ -113,7 +113,7 @@ class Server:
         """
         ...
 
-    def setDifficulty(self, difficulty: str) -> Promise[bool]:
+    def setDifficulty(self, difficulty: str) -> Coroutine[Any, Any, bool]:
         """Set server difficulty.
 
         Args:
@@ -124,15 +124,15 @@ class Server:
         """
         ...
 
-    def isHardcore(self) -> Promise[bool]:
+    def isHardcore(self) -> Coroutine[Any, Any, bool]:
         """Check if server is in hardcore mode."""
         ...
 
-    def getDefaultGameMode(self) -> Promise[str]:
+    def getDefaultGameMode(self) -> Coroutine[Any, Any, str]:
         """Get default game mode for new players."""
         ...
 
-    def setDefaultGameMode(self, gameMode: str) -> Promise[bool]:
+    def setDefaultGameMode(self, gameMode: str) -> Coroutine[Any, Any, bool]:
         """Set default game mode.
 
         Args:
@@ -144,7 +144,7 @@ class Server:
         ...
 
     # Server Management
-    def executeCommand(self, command: str) -> Promise[Dict[str, Any]]:
+    def executeCommand(self, command: str) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Execute console command.
 
         Args:
@@ -157,7 +157,7 @@ class Server:
         """
         ...
 
-    def broadcast(self, message: str) -> Promise[bool]:
+    def broadcast(self, message: str) -> Coroutine[Any, Any, bool]:
         """Broadcast message to all players.
 
         Args:
@@ -168,7 +168,7 @@ class Server:
         """
         ...
 
-    def save(self) -> Promise[bool]:
+    def save(self) -> Coroutine[Any, Any, bool]:
         """Save all worlds.
 
         Returns:
@@ -176,7 +176,7 @@ class Server:
         """
         ...
 
-    def stop(self) -> Promise[bool]:
+    def stop(self) -> Coroutine[Any, Any, bool]:
         """Stop the server.
 
         Returns:
@@ -185,15 +185,15 @@ class Server:
         ...
 
     # Whitelist Management
-    def getWhitelist(self) -> Promise[List[str]]:
+    def getWhitelist(self) -> Coroutine[Any, Any, List[str]]:
         """Get whitelisted player names."""
         ...
 
-    def isWhitelistEnabled(self) -> Promise[bool]:
+    def isWhitelistEnabled(self) -> Coroutine[Any, Any, bool]:
         """Check if whitelist is enabled."""
         ...
 
-    def setWhitelistEnabled(self, enabled: bool) -> Promise[bool]:
+    def setWhitelistEnabled(self, enabled: bool) -> Coroutine[Any, Any, bool]:
         """Enable or disable whitelist.
 
         Args:
@@ -205,14 +205,14 @@ class Server:
         ...
 
     # Operators and Bans
-    def getOperators(self) -> Promise[List[str]]:
+    def getOperators(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of operator names."""
         ...
 
-    def getBannedPlayers(self) -> Promise[List[str]]:
+    def getBannedPlayers(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of banned player names."""
         ...
 
-    def getBannedIPs(self) -> Promise[List[str]]:
+    def getBannedIPs(self) -> Coroutine[Any, Any, List[str]]:
         """Get list of banned IP addresses."""
         ...

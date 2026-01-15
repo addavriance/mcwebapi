@@ -1,21 +1,21 @@
 """Type stubs for MinecraftClient core class.
 
-This module provides type hints for the core client that handles
+This module provides type hints for the core async client that handles
 WebSocket communication and request/response handling.
 """
 
 from typing import Any, Dict, Optional
+import asyncio
 from .connection import ConnectionManager
-from .promise import Promise
 
 class MinecraftClient:
-    """Core client for handling WebSocket communication with Minecraft server.
+    """Core async client for handling WebSocket communication with Minecraft server.
 
     This is the low-level client that manages:
     - Connection lifecycle
     - Authentication
     - Request/response handling
-    - Promise resolution
+    - Future resolution
 
     Args:
         host: WebSocket server host (default: "localhost")
@@ -29,7 +29,7 @@ class MinecraftClient:
     auth_key: str
     timeout: float
     connection: ConnectionManager
-    pending_requests: Dict[str, Promise[Any]]
+    _pending_requests: Dict[str, asyncio.Future]
     _authenticated: bool
 
     def __init__(
@@ -40,7 +40,7 @@ class MinecraftClient:
         timeout: float = 10.0,
     ) -> None: ...
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Establish connection and authenticate with server.
 
         Raises:
@@ -48,7 +48,7 @@ class MinecraftClient:
         """
         ...
 
-    def disconnect(self) -> None:
+    async def disconnect(self) -> None:
         """Close connection and cleanup resources."""
         ...
 
@@ -76,10 +76,10 @@ class MinecraftClient:
         """
         ...
 
-    def send_request(
+    async def send_request(
         self, module: str, method: str, args: Optional[list] = None
-    ) -> Promise[Any]:
-        """Send request to server and return Promise.
+    ) -> Any:
+        """Send request to server and return the result.
 
         Args:
             module: Module name (e.g., "player", "block", "level")
@@ -87,11 +87,15 @@ class MinecraftClient:
             args: Optional list of arguments
 
         Returns:
-            Promise that will be resolved with the response
+            The response data from the server
+
+        Raises:
+            ConnectionError: If not connected or authenticated
+            TimeoutError: If request times out
         """
         ...
 
-    def _authenticate(self) -> None:
+    async def _authenticate(self) -> None:
         """Perform authentication flow with server.
 
         Raises:

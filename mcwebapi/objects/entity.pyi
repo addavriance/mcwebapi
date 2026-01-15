@@ -8,9 +8,9 @@ construction and is automatically sent as the first argument to all
 backend methods.
 """
 
-from typing import Any, Dict, List
+from typing import Dict, List
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class Entity:
     """Represents entity management in a specific level.
@@ -27,7 +27,7 @@ class Entity:
     def __init__(self, client: MinecraftClient, level_id: str) -> None: ...
 
     # Entity Creation and Removal
-    def spawn(self, entityTypeId: str, x: float, y: float, z: float) -> Promise[Dict[str, Any]]:
+    def spawn(self, entityTypeId: str, x: float, y: float, z: float) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Spawn entity at position.
 
         Args:
@@ -46,7 +46,7 @@ class Entity:
         """
         ...
 
-    def remove(self, entityUuid: str) -> Promise[bool]:
+    def remove(self, entityUuid: str) -> Coroutine[Any, Any, bool]:
         """Remove entity by UUID.
 
         Args:
@@ -57,7 +57,7 @@ class Entity:
         """
         ...
 
-    def kill(self, entityUuid: str) -> Promise[bool]:
+    def kill(self, entityUuid: str) -> Coroutine[Any, Any, bool]:
         """Kill entity by UUID.
 
         Args:
@@ -69,7 +69,7 @@ class Entity:
         ...
 
     # Entity Information
-    def getInfo(self, entityUuid: str) -> Promise[Dict[str, Any]]:
+    def getInfo(self, entityUuid: str) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get detailed entity information.
 
         Args:
@@ -93,7 +93,7 @@ class Entity:
         """
         ...
 
-    def getPosition(self, entityUuid: str) -> Promise[Dict[str, float]]:
+    def getPosition(self, entityUuid: str) -> Coroutine[Any, Any, Dict[str, float]]:
         """Get entity position.
 
         Args:
@@ -105,7 +105,7 @@ class Entity:
         ...
 
     # Entity Manipulation
-    def teleport(self, entityUuid: str, x: float, y: float, z: float) -> Promise[bool]:
+    def teleport(self, entityUuid: str, x: float, y: float, z: float) -> Coroutine[Any, Any, bool]:
         """Teleport entity to coordinates.
 
         Args:
@@ -119,7 +119,7 @@ class Entity:
         """
         ...
 
-    def setVelocity(self, entityUuid: str, x: float, y: float, z: float) -> Promise[bool]:
+    def setVelocity(self, entityUuid: str, x: float, y: float, z: float) -> Coroutine[Any, Any, bool]:
         """Set entity velocity.
 
         Args:
@@ -134,7 +134,7 @@ class Entity:
         ...
 
     # Entity Properties
-    def getCustomName(self, entityUuid: str) -> Promise[str]:
+    def getCustomName(self, entityUuid: str) -> Coroutine[Any, Any, str]:
         """Get entity custom name.
 
         Args:
@@ -145,7 +145,7 @@ class Entity:
         """
         ...
 
-    def setCustomName(self, entityUuid: str, name: str) -> Promise[bool]:
+    def setCustomName(self, entityUuid: str, name: str) -> Coroutine[Any, Any, bool]:
         """Set entity custom name.
 
         Args:
@@ -157,7 +157,7 @@ class Entity:
         """
         ...
 
-    def setGlowing(self, entityUuid: str, glowing: bool) -> Promise[bool]:
+    def setGlowing(self, entityUuid: str, glowing: bool) -> Coroutine[Any, Any, bool]:
         """Set entity glowing effect.
 
         Args:
@@ -169,7 +169,7 @@ class Entity:
         """
         ...
 
-    def setInvulnerable(self, entityUuid: str, invulnerable: bool) -> Promise[bool]:
+    def setInvulnerable(self, entityUuid: str, invulnerable: bool) -> Coroutine[Any, Any, bool]:
         """Set entity invulnerability.
 
         Args:
@@ -181,7 +181,7 @@ class Entity:
         """
         ...
 
-    def setFireTicks(self, entityUuid: str, ticks: int) -> Promise[bool]:
+    def setFireTicks(self, entityUuid: str, ticks: int) -> Coroutine[Any, Any, bool]:
         """Set entity fire ticks.
 
         Args:
@@ -196,7 +196,7 @@ class Entity:
     # Entity Queries
     def getEntitiesInRadius(
         self, x: float, y: float, z: float, radius: float
-    ) -> Promise[List[Dict[str, Any]]]:
+    ) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get all entities within radius of position.
 
         Args:
@@ -215,7 +215,7 @@ class Entity:
         """
         ...
 
-    def getEntitiesByType(self, entityTypeId: str) -> Promise[List[Dict[str, Any]]]:
+    def getEntitiesByType(self, entityTypeId: str) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get all entities of specific type.
 
         Args:
@@ -226,7 +226,7 @@ class Entity:
         """
         ...
 
-    def getAllEntities(self) -> Promise[List[Dict[str, Any]]]:
+    def getAllEntities(self) -> Coroutine[Any, Any, List[Dict[str, Any]]]:
         """Get all entities in the level.
 
         Returns:
@@ -234,7 +234,7 @@ class Entity:
         """
         ...
 
-    def getEntityCount(self) -> Promise[int]:
+    def getEntityCount(self) -> Coroutine[Any, Any, int]:
         """Get total entity count in level.
 
         Returns:
@@ -242,7 +242,7 @@ class Entity:
         """
         ...
 
-    def getEntityCountByType(self, entityTypeId: str) -> Promise[int]:
+    def getEntityCountByType(self, entityTypeId: str) -> Coroutine[Any, Any, int]:
         """Get entity count by type.
 
         Args:

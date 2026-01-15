@@ -1,4 +1,5 @@
-import time
+import asyncio
+from typing import Optional
 
 from .core import MinecraftClient
 from .objects import Player, Level, Command, Block, Server, Entity, Scoreboard
@@ -6,10 +7,16 @@ from .objects import Player, Level, Command, Block, Server, Entity, Scoreboard
 
 class MinecraftAPI:
     """
-    High-level API client for Minecraft WebSocket API.
+    High-level async API client for Minecraft WebSocket API.
 
     Provides easy access to various entities (player, world, command, system)
-    with a clean, intuitive interface.
+    with a clean, intuitive async/await interface.
+
+    Example:
+        async with MinecraftAPI() as api:
+            player = api.Player("Steve")
+            health = await player.getHealth()
+            print(f"Health: {health}")
     """
 
     def __init__(
@@ -19,56 +26,64 @@ class MinecraftAPI:
             auth_key: str = "default-secret-key-change-me",
             timeout: float = 10.0,
     ):
-        self._client = MinecraftClient(host, port, auth_key, timeout)
-
+        self.client = MinecraftClient(host, port, auth_key, timeout)
         self.timeout = timeout
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Connect to the Minecraft server."""
-        self._client.connect()
+        await self.client.connect()
 
-    def disconnect(self) -> None:
+    async def disconnect(self) -> None:
         """Disconnect from the Minecraft server."""
-        self._client.disconnect()
+        await self.client.disconnect()
 
     def is_connected(self) -> bool:
         """Check if connected to server."""
-        return self._client.is_connected()
+        return self.client.is_connected()
 
     def is_authenticated(self) -> bool:
         """Check if authenticated with server."""
-        return self._client.is_authenticated()
+        return self.client.is_authenticated()
 
-    def wait_for_pending(self):
-        start_time = time.time()
+    async def wait_for_pending(self) -> None:
+        """Wait for all pending requests to complete."""
+        while self.client.has_pending_requests():
+            await asyncio.sleep(0.1)
 
-        while self._client.has_pending_requests() and time.time() - start_time < self.timeout:
-            time.sleep(0.1)
-
-    def __enter__(self) -> "MinecraftAPI":
-        """Context manager entry."""
-        self.connect()
+    async def __aenter__(self) -> "MinecraftAPI":
+        """Async context manager entry."""
+        await self.connect()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """Wait for all promises to complete before disconnecting"""
-        self.wait_for_pending()
-        self.disconnect()
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Wait for all requests to complete before disconnecting"""
+        await self.wait_for_pending()
+        await self.disconnect()
 
-    def Player(self, identifier) -> Player:
-        return Player(self._client, identifier)
+    def Player(self, identifier: str) -> Player:
+        """Create a Player instance."""
+        return Player(self.client, identifier)
 
-    def Level(self, identifier) -> Level:
-        return Level(self._client, identifier)
+    def Level(self, identifier: str) -> Level:
+        """Create a Level instance."""
+        return Level(self.client, identifier)
 
-    def Block(self, *identifiers) -> Block:
-        return Block(self._client, *identifiers)
+    def Block(self, level_id: str) -> Block:
+        """Create a Block instance."""
+        return Block(self.client, level_id)
 
     def Server(self) -> Server:
-        return Server(self._client)
+        """Create a Server instance."""
+        return Server(self.client)
 
     def Entity(self, level_id: str) -> Entity:
-        return Entity(self._client, level_id)
+        """Create an Entity instance."""
+        return Entity(self.client, level_id)
 
     def Scoreboard(self) -> Scoreboard:
-        return Scoreboard(self._client)
+        """Create a Scoreboard instance."""
+        return Scoreboard(self.client)
+
+    def Command(self) -> Command:
+        """Create a Command instance."""
+        return Command(self.client)

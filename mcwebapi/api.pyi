@@ -1,6 +1,6 @@
 """Type stubs for MinecraftAPI main class.
 
-This module provides type hints for the high-level MinecraftAPI interface.
+This module provides type hints for the high-level async MinecraftAPI interface.
 """
 
 from typing import Optional
@@ -14,7 +14,7 @@ from .objects.entity import Entity
 from .objects.scoreboard import Scoreboard
 
 class MinecraftAPI:
-    """High-level API for interacting with Minecraft server via WebSocket.
+    """High-level async API for interacting with Minecraft server via WebSocket.
 
     Args:
         host: WebSocket server host (default: "localhost")
@@ -23,10 +23,10 @@ class MinecraftAPI:
         timeout: Request timeout in seconds (default: 10.0)
 
     Example:
-        >>> with MinecraftAPI() as api:
-        ...     player = api.Player("Steve")
-        ...     health = player.getHealth().wait()
-        ...     print(f"Health: {health}")
+        async with MinecraftAPI() as api:
+            player = api.Player("Steve")
+            health = await player.getHealth()
+            print(f"Health: {health}")
     """
 
     client: MinecraftClient
@@ -40,11 +40,11 @@ class MinecraftAPI:
     ) -> None: ...
 
     # Connection Management
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Establish connection and authenticate with server."""
         ...
 
-    def disconnect(self) -> None:
+    async def disconnect(self) -> None:
         """Close connection to server."""
         ...
 
@@ -64,21 +64,21 @@ class MinecraftAPI:
         """
         ...
 
-    def wait_for_pending(self) -> None:
+    async def wait_for_pending(self) -> None:
         """Wait for all pending requests to complete."""
         ...
 
-    # Context Manager
-    def __enter__(self) -> "MinecraftAPI":
-        """Enter context manager (connects automatically).
+    # Async Context Manager
+    async def __aenter__(self) -> "MinecraftAPI":
+        """Enter async context manager (connects automatically).
 
         Returns:
             Self instance
         """
         ...
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Exit context manager (disconnects automatically)."""
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Exit async context manager (disconnects automatically)."""
         ...
 
     # Factory Methods

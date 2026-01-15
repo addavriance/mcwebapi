@@ -1,5 +1,5 @@
 from .base import SocketInstance
-from ..api import MinecraftClient
+from ..core.client import MinecraftClient
 
 
 class Level(SocketInstance):

@@ -1,70 +1,79 @@
 import logging
-
-import websocket
+import asyncio
+import websockets
 import json
 import base64
-import threading
 from typing import Optional, Callable
 
 
 class ConnectionManager:
     """
-    Manages WebSocket connection and message handling.
+    Manages async WebSocket connection and message handling.
 
     Handles low-level WebSocket communication, message encoding/decoding,
-    and connection state management.
+    and connection state management using asyncio.
     """
 
     def __init__(self, host: str = "localhost", port: int = 8765):
         self.host = host
         self.port = port
-        self.ws: Optional[websocket.WebSocket] = None
+        self.ws: Optional[websockets.WebSocketClientProtocol] = None
         self._connected = False
-        self._receiver_thread: Optional[threading.Thread] = None
+        self._receiver_task: Optional[asyncio.Task] = None
         self._message_handler: Optional[Callable] = None
 
-    def connect(self) -> None:
-        """Establish WebSocket connection."""
+    async def connect(self) -> None:
+        """Establish async WebSocket connection."""
         ws_url = f"ws://{self.host}:{self.port}/"
         logging.info(f"Connecting to {ws_url}")
 
-        self.ws = websocket.WebSocket()
-        self.ws.connect(ws_url)
+        self.ws = await websockets.connect(ws_url)
         self._connected = True
 
-    def disconnect(self) -> None:
+    async def disconnect(self) -> None:
         """Close WebSocket connection."""
         self._connected = False
+        if self._receiver_task and not self._receiver_task.done():
+            self._receiver_task.cancel()
+            try:
+                await self._receiver_task
+            except asyncio.CancelledError:
+                pass
         if self.ws:
-            self.ws.close()
-        if self._receiver_thread:
-            self._receiver_thread.join(timeout=1)
+            await self.ws.close()
 
     def is_connected(self) -> bool:
         """Check if connected to server."""
-        return self._connected
+        return self._connected and self.ws is not None and not self.ws.closed
 
-    def send_message(self, message: dict) -> None:
+    async def send_message(self, message: dict) -> None:
         """Send encoded message through WebSocket."""
-        if not self._connected or not self.ws:
+        if not self.is_connected():
             raise ConnectionError("Not connected to server")
 
         encoded_message = self._encode_message(message)
-        self.ws.send(encoded_message)
+        await self.ws.send(encoded_message)
 
     def start_receiver(self, message_handler: Callable) -> None:
-        """Start message receiver thread."""
+        """Start message receiver task."""
         self._message_handler = message_handler
-        self._receiver_thread = threading.Thread(target=self._receiver_loop, daemon=False)
-        self._receiver_thread.start()
+        self._receiver_task = asyncio.create_task(self._receiver_loop())
 
-    def _receiver_loop(self) -> None:
-        """Main receiver loop for incoming messages."""
+    async def _receiver_loop(self) -> None:
+        """Main async receiver loop for incoming messages."""
         while self._connected and self.ws:
             try:
-                message = self.ws.recv()
+                message = await self.ws.recv()
                 if self._message_handler:
-                    self._message_handler(message)
+                    # Handle message in background if it's async
+                    if asyncio.iscoroutinefunction(self._message_handler):
+                        asyncio.create_task(self._message_handler(message))
+                    else:
+                        self._message_handler(message)
+            except websockets.exceptions.ConnectionClosed:
+                logging.info("WebSocket connection closed")
+                self._connected = False
+                break
             except Exception as e:
                 if self._connected:
                     logging.error(f"Receiver error: {e}")

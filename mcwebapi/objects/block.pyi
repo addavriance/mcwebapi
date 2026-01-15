@@ -10,7 +10,7 @@ backend methods.
 
 from typing import Any, Dict, List, Optional
 from ..core.client import MinecraftClient
-from ..core.promise import Promise
+from typing import Coroutine, Any
 
 class Block:
     """Represents a block or block position in Minecraft.
@@ -27,7 +27,7 @@ class Block:
     def __init__(self, client: MinecraftClient, levelId: str) -> None: ...
 
     # Block Inspection
-    def getBlock(self, x: int, y: int, z: int) -> Promise[Dict[str, Any]]:
+    def getBlock(self, x: int, y: int, z: int) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get detailed block information at position.
 
         Args:
@@ -51,7 +51,7 @@ class Block:
         ...
 
     # Block Manipulation
-    def setBlock(self, x: int, y: int, z: int, blockId: str) -> Promise[bool]:
+    def setBlock(self, x: int, y: int, z: int, blockId: str) -> Coroutine[Any, Any, bool]:
         """Set block at position.
 
         Args:
@@ -65,7 +65,7 @@ class Block:
         """
         ...
 
-    def breakBlock(self, x: int, y: int, z: int, dropItems: bool) -> Promise[bool]:
+    def breakBlock(self, x: int, y: int, z: int, dropItems: bool) -> Coroutine[Any, Any, bool]:
         """Break block at position.
 
         Args:
@@ -80,7 +80,7 @@ class Block:
         ...
 
     # Container Operations
-    def getInventory(self, x: int, y: int, z: int) -> Promise[Dict[str, Any]]:
+    def getInventory(self, x: int, y: int, z: int) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get inventory of container block (chest, barrel, etc.).
 
         Args:
@@ -102,7 +102,7 @@ class Block:
 
     def setInventorySlot(
         self, x: int, y: int, z: int, slot: int, itemId: str, count: int
-    ) -> Promise[bool]:
+    ) -> Coroutine[Any, Any, bool]:
         """Set item in container inventory slot.
 
         Args:
@@ -118,7 +118,7 @@ class Block:
         """
         ...
 
-    def clearInventory(self, x: int, y: int, z: int) -> Promise[bool]:
+    def clearInventory(self, x: int, y: int, z: int) -> Coroutine[Any, Any, bool]:
         """Clear container inventory.
 
         Args:
@@ -132,7 +132,7 @@ class Block:
         ...
 
     # Furnace Operations
-    def getFurnaceInfo(self, x: int, y: int, z: int) -> Promise[Dict[str, Any]]:
+    def getFurnaceInfo(self, x: int, y: int, z: int) -> Coroutine[Any, Any, Dict[str, Any]]:
         """Get furnace information.
 
         Args:
