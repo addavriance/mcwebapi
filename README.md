@@ -5,7 +5,7 @@
 <h1>Minecraft Websocket API</h1>
 <p>
     <strong>
-        Python client library for the 
+        Async Python client library for the 
         <a href="https://github.com/addavriance/MinecraftWebsocketAPI">Minecraft WebSocket API</a>
         mod
     </strong>
@@ -15,7 +15,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/mcwebapi?style=for-the-badge&logo=python&labelColor=black)](https://pypi.org/project/mcwebapi/)
 [![Downloads](https://img.shields.io/pypi/dm/mcwebapi?style=for-the-badge&labelColor=black&color=green)](https://pypi.org/project/mcwebapi/)
 
-Async Python client library for the [Minecraft WebSocket API](https://github.com/addavriance/MinecraftWebsocketAPI) mod. Control your Minecraft server programmatically with a clean, async/await API.
+</div>
 
 ## Quick Start
 
