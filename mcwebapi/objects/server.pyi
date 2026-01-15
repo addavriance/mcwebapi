@@ -153,7 +153,6 @@ class Server:
         Returns:
             Dictionary with keys:
                 - success (bool): Whether command succeeded
-                - exitCode (int, optional): Command exit code
                 - error (str, optional): Error message if failed
         """
         ...
